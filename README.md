@@ -8,6 +8,8 @@ A Rust [DS18B20](https://www.taydaelectronics.com/datasheets/A-072.pdf) temperat
 This device uses the 1-wire protocol, and requires using the [one-wire-bus](https://crates.io/crates/one-wire-bus)
 library for the 1-wire bus.
 
+The difference with `fuchsnj/ds18b20` is that I applied all PRs from there, and make depenencies required by users `pub use`.
+
 ## Quick Start
 
 ### Get Temperature

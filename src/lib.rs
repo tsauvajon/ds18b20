@@ -2,9 +2,9 @@
 
 //! # Test Test
 
-use embedded_hal::blocking::delay::DelayUs;
-use embedded_hal::digital::v2::{InputPin, OutputPin};
-use one_wire_bus::{self, Address, OneWire, OneWireError, OneWireResult};
+pub use embedded_hal::blocking::delay::DelayUs;
+pub use embedded_hal::digital::v2::{InputPin, OutputPin};
+pub use one_wire_bus::{self, Address, OneWire, OneWireError, OneWireResult};
 
 pub const FAMILY_CODE: u8 = 0x28;
 
