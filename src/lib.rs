@@ -4,8 +4,8 @@
 
 pub use embedded_hal::delay::DelayNs;
 pub use embedded_hal::digital::{InputPin, OutputPin};
-pub use one_wire_bus::{Address, OneWire, OneWireError, OneWireResult};
 use one_wire_bus::crc::check_crc8;
+pub use one_wire_bus::{Address, OneWire, OneWireError, OneWireResult};
 
 /// The DS18B20 family code.
 pub const FAMILY_CODE: u8 = 0x28;
@@ -72,7 +72,7 @@ impl Ds18b20 {
     pub fn read_scratchpad<T, E>(
         &self,
         onewire: &mut OneWire<T>,
-        delay: &mut impl DelayUs<u16>,
+        delay: &mut impl DelayNs,
     ) -> OneWireResult<[u8; 9], E>
     where
         T: InputPin<Error = E>,
