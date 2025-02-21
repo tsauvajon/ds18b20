@@ -1,0 +1,11 @@
+name: rust
+on: [pull_request]
+
+jobs:
+  test:
+    name: cargo clippy
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dtolnay/rust-toolchain@stable
+      - run: cargo clippy --all-targets --all-features --workspace -- -D warnings
