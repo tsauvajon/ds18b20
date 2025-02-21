@@ -1,15 +1,18 @@
 #![no_std]
 
+//! This crate provides a driver for the DS18B20 digital one-wire temperature sensor.
+
 pub use embedded_hal::delay::DelayNs;
 pub use embedded_hal::digital::{InputPin, OutputPin};
 pub use one_wire_bus::{Address, OneWire, OneWireError, OneWireResult};
+use one_wire_bus::crc::check_crc8;
 
+/// The DS18B20 family code.
 pub const FAMILY_CODE: u8 = 0x28;
 
 pub mod commands;
 mod resolution;
 
-use one_wire_bus::crc::check_crc8;
 pub use resolution::Resolution;
 
 /// All of the data that can be read from the sensor.
@@ -28,6 +31,7 @@ pub struct SensorData {
     pub alarm_temp_high: i8,
 }
 
+/// Wrap a DS18B20 sensor.
 pub struct Ds18b20 {
     address: Address,
 }
@@ -62,6 +66,20 @@ impl Ds18b20 {
     {
         onewire.send_command(commands::CONVERT_TEMP, Some(&self.address), delay)?;
         Ok(())
+    }
+
+    /// Read and return the raw scratchpad data (after checking the CRC).
+    pub fn read_scratchpad<T, E>(
+        &self,
+        onewire: &mut OneWire<T>,
+        delay: &mut impl DelayUs<u16>,
+    ) -> OneWireResult<[u8; 9], E>
+    where
+        T: InputPin<Error = E>,
+        T: OutputPin<Error = E>,
+    {
+        let scratchpad = read_scratchpad(&self.address, onewire, delay)?;
+        Ok(scratchpad)
     }
 
     pub fn read_data<T, E>(
@@ -160,6 +178,7 @@ where
     save_to_eeprom(None, onewire, delay)
 }
 
+/// Read and return the raw scratchpad data (after checking the CRC).
 pub fn read_scratchpad<T, E>(
     address: &Address,
     onewire: &mut OneWire<T>,

@@ -1,5 +1,6 @@
 use embedded_hal::delay::DelayNs;
 
+/// Measurement resolution (9-12 bits).
 #[repr(u8)]
 #[derive(Copy, Clone, Debug)]
 pub enum Resolution {
